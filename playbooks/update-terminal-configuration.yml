@@ -1,0 +1,73 @@
+---
+
+- hosts: all
+  vars:
+    local_home: "{{ lookup('env', 'HOME') }}"
+    remote_home: "{{ ansible_env.HOME }}"
+    bin: "{{ local_home }}/src/proyectos/markthestripper/bin/"
+    templates: "{{ local_home }}/src/proyectos/markthestripper/templates"
+    shell: "{{ templates }}/shell"
+    user_bashrc: "{{ shell }}/.bashrc_user"
+    root_bashrc: "{{ shell }}/.bashrc_root"
+    aliases: "{{ shell }}/.bash_aliases"
+    vim: "{{ shell }}/.vim/"
+    vimrc: "{{ shell }}/.vimrc"
+    tmux: "{{ shell }}/.tmux/"
+    tmux_conf: "{{ shell }}/.tmux.conf"
+    bash_completion: "{{ templates }}/bash_completion.d/"
+
+  tasks:  
+    - name: synchronize user configuration
+      synchronize:
+        archive: yes
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { src: "{{ bin }}", dest: "{{ remote_home }}/bin" }  
+        - { src: "{{ user_bashrc }}", dest: "{{ remote_home }}/.bashrc" }  
+        - { src: "{{ aliases }}", dest: "{{ remote_home }}/.bash_aliases" }  
+        - { src: "{{ vim }}", dest: "{{ remote_home }}/.vim" }  
+        - { src: "{{ vimrc }}", dest: "{{ remote_home }}/.vimrc" }  
+        - { src: "{{ tmux }}", dest: "{{ remote_home }}/.tmux" }  
+        - { src: "{{ tmux_conf }}", dest: "{{ remote_home }}/.tmux.conf" }  
+    
+    - name: synchronize root configuration
+      synchronize:
+        archive: yes
+        rsync_path: "sudo rsync"
+        src: "{{ item.src }}"
+        dest: "{{ item.dest }}"
+      with_items:
+        - { src: "{{ bin }}", dest: "/root/bin" }  
+        - { src: "{{ root_bashrc }}", dest: "/root/.bashrc" }  
+        - { src: "{{ aliases }}", dest: "/root/.bash_aliases" }  
+        - { src: "{{ vim }}", dest: "/root/.vim" }  
+        - { src: "{{ vimrc }}", dest: "/root/.vimrc" }  
+        - { src: "{{ tmux }}", dest: "/root/.tmux" }  
+        - { src: "{{ tmux_conf }}", dest: "/root/.tmux.conf" }
+        - { src: "{{ bash_completion }}", dest: "/etc/bash_completion.d/" }
+
+    - name: change root files properties
+      become: yes
+      file:
+        path: "{{ item }}"
+        owner: "root"
+        group: "root"
+      with_items:
+        - /root/.bashrc
+        - /root/.bash_aliases
+        - /root/.vimrc
+        - /root/.tmux.conf
+
+    - name: change root directories properties
+      become: yes
+      file:
+        path: "{{ item }}"
+        owner: "root"
+        group: "root"
+        recurse: yes
+      with_items:
+        - /root/bin
+        - /root/.vim
+        - /root/.tmux
+        - /etc/bash_completion.d

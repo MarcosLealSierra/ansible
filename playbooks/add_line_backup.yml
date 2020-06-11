@@ -1,0 +1,16 @@
+---
+
+- name: Añade línea al backup 
+  hosts: all
+  remote_user: root
+  vars:
+      - tmpfile: "/tmp/output"
+  tasks:
+
+    - name: Insertar linea
+      lineinfile:
+          path: /etc/backup/include
+          line: /home/area
+      register: out
+
+

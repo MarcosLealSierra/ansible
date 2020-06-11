@@ -1,0 +1,8 @@
+---
+- hosts: hablemosdeazucar
+  vars:
+    local_home: "{{lookup('env','HOME')}}/src/proyectos/markthestripper"
+  tasks:
+    - name: Printing the environment variable in Ansible
+      debug:
+        msg: "{{local_home}}"

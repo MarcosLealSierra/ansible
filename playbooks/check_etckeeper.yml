@@ -1,0 +1,14 @@
+---
+
+- hosts: all
+  tasks:
+    - script: 'check_etckeeper.sh'
+      register: result
+
+    - name: stdout
+      debug:
+        msg: '{{ result.stdout }}'
+
+    - name: stderr
+      debug:
+        msg: '{{ result.stderr }}'

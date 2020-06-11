@@ -1,0 +1,20 @@
+- name: Install Digital Ocean monitoring agent on all hosts
+  hosts: todos
+  become: yes
+  become_user: root
+  become_method: sudo
+  tasks:
+    - name: install curl
+      shell: apt install -y curl
+
+    - name: install do key
+      shell: curl https://repos.insights.digitalocean.com/sonar-agent.asc | apt-key add -
+
+    - name: add do repo
+      shell: echo "deb https://repos.insights.digitalocean.com/apt/do-agent/ main main" > /etc/apt/sources.list.d/digitalocean-agent.list
+    
+    - name: update repos
+      shell: apt update
+    
+    - name: install do agent
+      shell: apt install do-agent

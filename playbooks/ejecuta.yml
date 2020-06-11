@@ -1,0 +1,20 @@
+---
+# ejecuta cualquier comando pasado a través de la variable cmd
+# uso:
+# ansible-playbook ejecuta.yml -l filtro -e "cmd=comando-shell"
+
+- hosts: all
+  gather_facts: true
+  tasks:
+    - name: Ejecuta el comando especificado al llamar este playbook
+      shell: '{{cmd}}'
+      register: result
+      when: (cmd is defined) and (cmd|length > 0)
+
+    - name: stdout
+      debug:
+        msg: '{{ result.stdout }}'
+
+    - name: stderr
+      debug:
+        msg: '{{ result.stderr }}'

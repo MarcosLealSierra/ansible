@@ -1,0 +1,49 @@
+---
+# sobre variables https://docs.ansible.com/ansible/latest/user_guide/playbooks_variables.html
+
+- name: Informes de servidores
+  hosts: all
+  remote_user: root
+  tags: documentacion
+  vars:
+        # -cliente: en inventario
+        - informe: informe_{{ cliente }}_{{ inventory_hostname }}.rst
+        - local_informes_dir: ~/src/doc/100_informes_servidores/
+        - local_informes_scripts: ~/src/informes_instalaciones_servidores
+        - remote_informes_scripts: /tmp/informes_instalaciones_servidores
+        - docdir: "{{ lookup('env', 'DOCDIR') }}"
+
+  tasks:
+
+    - name: copiar ruta en destino
+      synchronize:
+          src: "{{ local_informes_scripts }}/"
+          dest: "{{ remote_informes_scripts }}/"
+          use_ssh_args: yes
+
+    - name: status docdir
+      debug: var=docdir
+
+    - name: runparts informes
+      shell: |
+          run-parts {{ remote_informes_scripts }} | tee /tmp/{{ informe }}
+      register: out
+      ignore_errors: True
+
+    - name: descargar informe en 100_informes
+      synchronize: src=/tmp/{{ informe }} dest={{ local_informes_dir }}/{{ informe }} mode=pull use_ssh_args=yes
+
+    - name: descargar informe en el directorio de documentación del cliente
+      synchronize: src=/tmp/{{ informe }} dest={{ docdir }}/100_{{ informe }} mode=pull use_ssh_args=yes
+
+      when: (docdir is defined) and (docdir|length > 0)
+
+    - name: runparts mostrar los errores de ejecución
+      debug: var=out.stderr_lines
+
+    - name: limpiar informes en destino
+      file: state=absent path={{ item }}
+      with_items:
+          - "{{ remote_informes_scripts }}"
+          - "/tmp/{{ informe }}"
+

@@ -1,0 +1,30 @@
+---
+
+- name: Pruebas de ejecución en hosts remotos
+  hosts: all
+  remote_user: root
+  vars:
+      - tmpfile: "/tmp/output"
+  tasks:
+
+    - name: ejecutar uptime
+      shell: |
+          uptime
+      register: out
+
+    # https://docs.ansible.com/ansible/latest/user_guide/playbooks_delegation.html
+    - name: limpiar {{ tmpfile }}
+      local_action: "shell echo '' | tee {{ tmpfile }}" 
+      run_once: true
+
+    - name: Resumen de ejecución a {{ tmpfile }}
+      local_action: "shell echo '{{inventory_hostname}}:\t{{ out.stdout }}' | tee -a {{ tmpfile }}" 
+
+    - name: stdout [debug]
+      debug: var=out.stdout_lines
+      when: ! out.stdout_lines|length > 0
+
+    - name: stderr [debug]
+      debug: var=out.stderr_lines
+      when: ! out.stderr_lines|length > 0
+
