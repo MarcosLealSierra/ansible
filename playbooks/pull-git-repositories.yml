@@ -1,17 +1,16 @@
 ---
 
-- hosts: hablemosdeazucar
-  become: yes
-  become_user: root
+- hosts: all
 
   tasks: 
+
     - name: Pull repositories
       git:
         repo: "{{ item.repo }}"
         dest: "{{ item.dest }}"
         version: master
       with_items:
-        - { repo: "git@gitlab.com:eulogios/hablemosdeazucarcgi.git", dest: "/srv/websites/hablemosdeazucarcgi" }
-          #- { repo: "git@gitlab.com:eulogios/.git", dest: "/srv/websites/" }
+        #- { repo: "git@gitlab.com:eulogios/hablemosdeazucarcgi.git", dest: "/srv/websites/hablemosdeazucarcgi" }
+        - { repo: "git@gitlab.com:marcoslealsierra/marcoslealsierra.git", dest: "/srv/websites/marcoslealsierra" }
           #- { repo: "git@gitlab.com:eulogios/.git", dest: "/srv/websites/" }
           #- { repo: "git@gitlab.com:eulogios/.git", dest: "/srv/websites/" }

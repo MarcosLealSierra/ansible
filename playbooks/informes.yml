@@ -3,7 +3,6 @@
 
 - name: Informes de servidores
   hosts: all
-  remote_user: root
   tags: documentacion
   vars:
         # -cliente: en inventario

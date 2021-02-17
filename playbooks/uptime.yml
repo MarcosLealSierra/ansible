@@ -2,9 +2,9 @@
 
 - name: Pruebas de ejecución en hosts remotos
   hosts: all
-  remote_user: root
   vars:
       - tmpfile: "/tmp/output"
+
   tasks:
 
     - name: ejecutar uptime

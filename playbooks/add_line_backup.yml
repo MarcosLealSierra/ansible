@@ -2,10 +2,9 @@
 
 - name: Añade línea al backup 
   hosts: all
-  become: yes
-  become_user: root
   vars:
       - tmpfile: "/tmp/output"
+
   tasks:
 
     - name: Insertar linea

@@ -1,0 +1,27 @@
+# TODO: IPs y DNSs
+[sembei:vars]
+become = yes
+become_user = root
+become_method = sudo
+ansible_ssh_user = sembei
+ansible_ssh_port = 6139
+ansible_python_interpreter = '/usr/bin/env python3'
+
+[sembei:children]
+umbrella
+metelecaña
+siegfried
+
+[umbrella]
+argo
+comecarne
+expocarnes
+grupogusi
+
+[metelecaña]
+hablemosdeazucar
+lazucar
+lonchicuates
+
+[siegfried]
+siegfried

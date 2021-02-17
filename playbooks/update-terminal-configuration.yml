@@ -17,6 +17,7 @@
     bash_completion: "{{ templates }}/bash_completion.d/"
 
   tasks:  
+
     - name: synchronize user configuration
       synchronize:
         archive: yes

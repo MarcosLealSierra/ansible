@@ -1,7 +1,8 @@
 ---
 
 - name: Listar facts (variables que obtiene ansible de cada cliente)
-  hosts: devlocal
+  hosts: all
+
   tasks:
 
     - name: Display the config

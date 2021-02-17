@@ -5,7 +5,9 @@
 
 - hosts: all
   gather_facts: true
+
   tasks:
+
     - name: Ejecuta el comando especificado al llamar este playbook
       shell: '{{cmd}}'
       register: result

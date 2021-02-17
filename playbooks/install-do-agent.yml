@@ -1,9 +1,10 @@
+---
+
 - name: Install Digital Ocean monitoring agent on all hosts
-  hosts: todos
-  become: yes
-  become_user: root
-  become_method: sudo
+  hosts: all
+  
   tasks:
+  
     - name: install curl
       shell: apt install -y curl
 

@@ -1,0 +1,20 @@
+# TODO: IPs y DNSs
+[mknet:vars]
+become = yes
+become_user = root
+become_method = sudo
+ansible_ssh_user = mleal
+ansible_ssh_port = 22
+ansible_python_interpreter = '/usr/bin/env python3'
+
+[mknet:children]
+mknet_hosts
+mknet_vms
+
+[mknet_hosts]
+pacopepe
+
+[mknet_vms]
+morpho
+pandora
+delfina

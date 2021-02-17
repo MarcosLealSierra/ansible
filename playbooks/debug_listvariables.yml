@@ -2,7 +2,7 @@
 
 - name: Prueba de ejecución en bash
   hosts: all
-  remote_user: root
+
   tasks:
 
     - name: "Ansible | List all known variables and facts"
